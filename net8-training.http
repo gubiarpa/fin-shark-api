@@ -1,0 +1,6 @@
+@net8_training_HostAddress = http://localhost:5081
+
+GET {{net8_training_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
