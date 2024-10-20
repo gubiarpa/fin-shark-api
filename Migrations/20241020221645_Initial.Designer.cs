@@ -12,8 +12,8 @@ using net8_training.Data;
 namespace net8_training.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241018091929_init")]
-    partial class init
+    [Migration("20241020221645_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
