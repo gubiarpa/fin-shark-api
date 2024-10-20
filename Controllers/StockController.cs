@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net8_training.Data;
 using net8_training.Dtos.Stock;
+using net8_training.Helpers;
 using net8_training.Mappers;
 
 namespace net8_training.Controllers
@@ -33,7 +34,7 @@ namespace net8_training.Controllers
             if (stock == null)
                 return NotFound();
 
-            return Ok(stock);
+            return Ok(stock.ToDto());
         }
 
         [HttpPost]
@@ -45,6 +46,22 @@ namespace net8_training.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateStockRequestDto stockDto)
+        {
+            Console.WriteLine($"MarketCap: {stockDto.MarketCap}");
+            var stock = await _context.Stocks.FindAsync(id);
+
+            if (stock == null)
+                return NotFound();
+
+            stock.Update(stockDto);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(stock.ToDto());
         }
     }
 }
