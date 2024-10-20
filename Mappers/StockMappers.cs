@@ -18,5 +18,18 @@ namespace net8_training.Mappers
                 MarketCap = stockModel.MarketCap
             };
         }
+
+        public static Stock ToModel(this CreateStockRequestDto stockDto)
+        {
+            return new Stock
+            {
+                Symbol = stockDto.Symbol,
+                CompanyName = stockDto.CompanyName,
+                PurchasePrice = stockDto.PurchasePrice,
+                LastDividend = stockDto.LastDividend,
+                Industry = stockDto.Industry,
+                MarketCap = stockDto.MarketCap
+            };
+        }
     }
 }

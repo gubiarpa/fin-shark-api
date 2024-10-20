@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net8_training.Data;
+using net8_training.Dtos.Stock;
 using net8_training.Mappers;
 
 namespace net8_training.Controllers
@@ -33,6 +34,17 @@ namespace net8_training.Controllers
                 return NotFound();
 
             return Ok(stock);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto)
+        {
+            var stock = stockDto.ToModel();
+
+            await _context.Stocks.AddAsync(stock);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock);
         }
     }
 }
