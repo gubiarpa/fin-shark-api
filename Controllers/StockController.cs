@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net8_training.Data;
+using net8_training.Mappers;
 
 namespace net8_training.Controllers
 {
@@ -18,7 +19,7 @@ namespace net8_training.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var stocks = await _context.Stocks.ToListAsync();
+            var stocks = await _context.Stocks.Select(x => x.ToDto()).ToListAsync();
 
             return Ok(stocks);
         }
