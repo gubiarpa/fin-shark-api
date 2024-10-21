@@ -3,16 +3,14 @@ using net8_training.Data;
 using net8_training.Helpers;
 using net8_training.Interfaces;
 using net8_training.Models;
+using net8_training.Repository.Base;
 
 namespace net8_training.Repository
 {
-    public class StockRepository : IStockRepository
+    public class StockRepository : RepositoryBase, IStockRepository
     {
-        private readonly ApplicationDbContext _context;
-
-        public StockRepository(ApplicationDbContext context)
+        public StockRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task<IEnumerable<Stock>> GetAllAsync()
