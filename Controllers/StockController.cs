@@ -49,19 +49,31 @@ namespace net8_training.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateStockRequestDto stockDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto stockDto)
         {
-            Console.WriteLine($"MarketCap: {stockDto.MarketCap}");
             var stock = await _context.Stocks.FindAsync(id);
 
-            if (stock == null)
+            if (stock is null)
                 return NotFound();
 
             stock.Update(stockDto);
-
             await _context.SaveChangesAsync();
 
             return Ok(stock.ToDto());
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var stock = await _context.Stocks.FindAsync(id);
+
+            if (stock is null)
+                return NotFound();
+
+            _context.Stocks.Remove(stock);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
