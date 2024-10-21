@@ -1,11 +1,10 @@
-using net8_training.Dtos.Stock;
 using net8_training.Models;
 
 namespace net8_training.Helpers
 {
     public static class StockHelpers
     {
-        public static void Update(this Stock stock, UpdateStockRequestDto stockDto)
+        public static void Update(this Stock stock, Stock stockDto)
         {
             stock.Symbol = stockDto.Symbol;
             stock.CompanyName = stockDto.CompanyName;

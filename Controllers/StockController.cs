@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using net8_training.Data;
 using net8_training.Dtos.Stock;
-using net8_training.Helpers;
+using net8_training.Interfaces;
 using net8_training.Mappers;
 
 namespace net8_training.Controllers
@@ -11,25 +9,25 @@ namespace net8_training.Controllers
     [ApiController]
     public class StockController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IStockRepository _stockRepository;
 
-        public StockController(ApplicationDbContext context)
+        public StockController(IStockRepository stockRepository)
         {
-            _context = context;
+            _stockRepository = stockRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var stocks = await _context.Stocks.Select(x => x.ToDto()).ToListAsync();
+            var stocks = await _stockRepository.GetAllAsync();
 
-            return Ok(stocks);
+            return Ok(stocks.Select(x => x.ToDto()));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var stock = await _context.Stocks.FindAsync(id);
+            var stock = await _stockRepository.GetByIdAsync(id);
 
             if (stock == null)
                 return NotFound();
@@ -40,24 +38,18 @@ namespace net8_training.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto)
         {
-            var stock = stockDto.ToModel();
+            var stock = await _stockRepository.CreateAsync(stockDto.ToModel());
 
-            await _context.Stocks.AddAsync(stock);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock);
+            return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock.ToDto());
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto stockDto)
         {
-            var stock = await _context.Stocks.FindAsync(id);
+            var stock = await _stockRepository.UpdateAsync(id, stockDto.ToModel());
 
             if (stock is null)
                 return NotFound();
-
-            stock.Update(stockDto);
-            await _context.SaveChangesAsync();
 
             return Ok(stock.ToDto());
         }
@@ -65,13 +57,10 @@ namespace net8_training.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var stock = await _context.Stocks.FindAsync(id);
+            var stock = await _stockRepository.DeleteAsync(id);
 
             if (stock is null)
                 return NotFound();
-
-            _context.Stocks.Remove(stock);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }

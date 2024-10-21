@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using net8_training.Data;
+using net8_training.Interfaces;
+using net8_training.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MainConnection"));
 });
 
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,8 +31,3 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
