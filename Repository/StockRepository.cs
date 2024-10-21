@@ -8,7 +8,7 @@ namespace net8_training.Repository
 {
     public class StockRepository : IStockRepository
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public StockRepository(ApplicationDbContext context)
         {
