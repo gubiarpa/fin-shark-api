@@ -13,7 +13,6 @@ namespace net8_training.Mappers
                 Title = comment.Title,
                 Content = comment.Content,
                 CreatedOn = comment.CreatedOn,
-                StockId = comment.StockId
             };
         }
     }

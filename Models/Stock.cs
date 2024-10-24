@@ -14,6 +14,6 @@ namespace net8_training.Models
         public string Industry { get; set; } = string.Empty;
         public long MarketCap { get; set; }
 
-        public IEnumerable<Comment> Comments { get; set; } = [];
+        public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

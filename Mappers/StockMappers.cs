@@ -15,7 +15,8 @@ namespace net8_training.Mappers
                 PurchasePrice = stockModel.PurchasePrice,
                 LastDividend = stockModel.LastDividend,
                 Industry = stockModel.Industry,
-                MarketCap = stockModel.MarketCap
+                MarketCap = stockModel.MarketCap,
+                Comments = stockModel.Comments.Select(x => x.ToDto()).ToList()
             };
         }
 

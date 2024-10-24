@@ -23,6 +23,7 @@ namespace net8_training.Controllers
             return Ok(comments.Select(x => x.ToDto()));
         }
 
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var comment = await _commentRepository.GetByIdAsync(id);

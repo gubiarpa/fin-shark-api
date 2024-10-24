@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using net8_training.Data;
 using net8_training.Helpers;
 using net8_training.Interfaces;
+using net8_training.Mappers;
 using net8_training.Models;
 using net8_training.Repository.Base;
 
@@ -15,12 +16,16 @@ namespace net8_training.Repository
 
         public async Task<IEnumerable<Stock>> GetAllAsync()
         {
-            return await _context.Stocks.ToListAsync();
+            return await _context.Stocks
+                .Include(x => x.Comments)
+                .ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
         {
-            return await _context.Stocks.FindAsync(id);
+            return await _context.Stocks
+                .Include(x => x.Comments)
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
         public async Task<Stock> CreateAsync(Stock stock)
